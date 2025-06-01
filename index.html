@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SharpVision</title>
+    <link rel="icon" href="https://i.postimg.cc/CxdB6Wx1/image.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#0099ff", secondary: "#001f3f" },
+                    borderRadius: {
+                        none: "0px",
+                        sm: "4px",
+                        DEFAULT: "8px",
+                        md: "12px",
+                        lg: "16px",
+                        xl: "20px",
+                        "2xl": "24px",
+                        "3xl": "32px",
+                        full: "9999px",
+                        button: "8px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        @keyframes blob {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+        
+        .animate-blob {
+            animation: blob 15s infinite;
+        }
+        
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        /* Smooth scrolling for the entire page */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* Account for fixed navbar */
+        }
+
+        /* Scroll snap for sections */
+        section {
+            scroll-snap-align: start;
+            scroll-margin-top: 80px; /* Account for fixed navbar */
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0099ff;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0077cc;
+        }
+
+        /* Scroll to top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 153, 255, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: none;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: #0077cc;
+            transform: translateY(-3px);
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+        .loader img {
+            animation: pulse 1.5s infinite ease-in-out;
+            max-width: 80%;
+            height: auto;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://i.postimg.cc/WbgHpTs4/noFilter.webp');
+            background-size: cover;
+            background-position: center;
+            filter: blur(3.5px);
+            z-index: 0;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 100%);
+            z-index: 1;
+        }
+        .game-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 153, 255, 0.1), 0 10px 10px -5px rgba(0, 153, 255, 0.04);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 32px;
+            height: 24px;
+            position: relative;
+            z-index: 100;
+            padding: 0;
+            transition: transform 0.3s ease;
+        }
+        .hamburger:focus {
+            outline: none;
+        }
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: white;
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform-origin: center;
+            transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .hamburger span:nth-child(1) { 
+            top: 0px;
+            transition-delay: 0.15s;
+        }
+        .hamburger span:nth-child(2) { 
+            top: 50%;
+            transform: translateY(-50%);
+            transition-delay: 0.2s;
+        }
+        .hamburger span:nth-child(3) { 
+            bottom: 0px;
+            transition-delay: 0.25s;
+        }
+        .hamburger.active {
+            transform: rotate(180deg);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(10.5px) rotate(45deg);
+            transition-delay: 0.1s;
+        }
+        .hamburger.active span:nth-child(2) { 
+            opacity: 0;
+            transform: translateX(-16px);
+            transition: opacity 0.1s ease, transform 0.2s ease;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-10.5px) rotate(-45deg);
+            transition-delay: 0.1s;
+        }
+        .nav-links {
+            position: fixed;
+            background: #333;
+            height: 100vh;
+            width: 100%;
+            top: 0;
+            left: -100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: left 0.5s ease;
+            z-index: 10;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .nav-links.active {
+            left: 0;
+        }
+        .merch-alert {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .merch-alert.hero-sticky {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .merch-modal {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .navbar.menu-active .hamburger {
+                position: fixed;
+                right: 1rem;
+                top: 1rem;
+            }
+            .merch-alert.hero-sticky {
+                bottom: 20px;
+                right: 15px;
+                padding: 16px 24px;
+                border-radius: 50px;
+            }
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Loader -->
+    <div class="loader fixed inset-0 flex items-center justify-center bg-gray-900/95 backdrop-blur-sm">
+        <div class="text-center">
+            <img src="https://i.postimg.cc/4y5C7WZf/image-removebg-preview-1.png" alt="SharpVision Logo" class="w-33 h-32 mx-auto mb-4 animate-float">
+            <span class="text-2xl font-bold text-white">SharpVision</span>
+        </div>
+    </div>
+
+    <!-- Merch Modal -->
+    <div id="merchModal" class="fixed inset-0 z-50 hidden merch-modal overflow-y-auto">
+        <div class="flex items-center justify-center min-h-full p-4">
+            <div class="bg-gray-800 rounded-xl p-6 sm:p-8 max-w-md w-full mx-auto my-8 relative">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-center flex-1">🔥 New Collection</h3>
+                    <button onclick="toggleMerchModal()" class="text-gray-400 hover:text-primary ml-4" aria-label="Close">
+                        <i class="ri-close-line text-2xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-6 text-center">
+                    <p class="text-gray-300 px-2">Check out our limited edition SharpVision merchandise!</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-700 p-4 rounded-lg flex flex-col items-center">
+                            <div class="h-32 w-full bg-gray-600 rounded-lg mb-3"></div>
+                            <p class="font-medium text-center">TBD</p>
+                        </div>
+                        <div class="bg-gray-700 p-4 rounded-lg flex flex-col items-center">
+                            <div class="h-32 w-full bg-gray-600 rounded-lg mb-3"></div>
+                            <p class="font-medium text-center">TBD</p>
+                        </div>
+                    </div>
+                    <button class="w-full max-w-xs mx-auto bg-primary hover:bg-blue-600 py-3 px-6 rounded-lg font-medium transition-colors duration-200">
+                        Shop Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar fixed top-0 w-full z-50 bg-transparent backdrop-blur-sm transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+            <div class="flex items-center justify-between">
+                <a href="#" class="flex items-center space-x-2">
+                    <img src="https://i.postimg.cc/4y5C7WZf/image-removebg-preview-1.png" alt="SharpVision Logo" class="h-8">
+                    <span class="text-xl font-bold">SharpVision</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-2">
+                    <ul class="flex items-center space-x-6">
+                        <li><a href="#home" class="text-white hover:text-primary transition-colors font-medium">Home</a></li>
+                        <li><a href="#games" class="text-white hover:text-primary transition-colors font-medium">Games</a></li>
+                        <li><a href="#team" class="text-white hover:text-primary transition-colors font-medium">Team</a></li>
+                        <li><a href="#contact" class="text-white hover:text-primary transition-colors font-medium">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <div class="nav-links md:hidden" id="mobileMenu" aria-hidden="true">
+                    <ul class="flex flex-col items-center space-y-8 py-8">
+                        <li><a href="#home" class="text-2xl font-medium hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#games" class="text-2xl font-medium hover:text-primary transition-colors">Games</a></li>
+                        <li><a href="#team" class="text-2xl font-medium hover:text-primary transition-colors">Team</a></li>
+                        <li><a href="#contact" class="text-2xl font-medium hover:text-primary transition-colors">Contact</a></li>
+                        <li class="mt-8">
+                            <button class="merch-modal-trigger bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white py-3 px-8 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2">
+                                <i class="ri-fire-fill"></i>
+                                <span>New Merch Drop!</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="hamburger md:hidden" id="hamburger" onclick="toggleMobileMenu()" aria-expanded="false" aria-label="Toggle navigation menu" aria-controls="mobileMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero min-h-screen flex items-center justify-center relative">
+        <div class="hero-bg"></div>
+        <button class="merch-alert merch-modal-trigger hero-sticky hidden md:flex" aria-label="View new merchandise">
+            <i class="ri-fire-fill"></i>
+            <span>New Merch Drop!</span>
+        </button>
+        
+        <div class="container mx-auto px-4 sm:px-6 py-12 relative z-10 w-full">
+            <div class="max-w-4xl mx-auto">
+                <!-- Text Content -->
+                <div class="text-center mb-8 sm:mb-12 px-2">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug sm:leading-tight">
+                        <div class="space-y-0 sm:space-y-1">
+                            <div class="leading-tight">Crafting <span class="text-primary">Enjoyable</span></div>
+                            <div class="leading-tight">Experiences on</div>
+                            <div class="text-primary leading-tight">Roblox</div>
+                        </div>
+                    </h1>
+                    <p class="text-base sm:text-lg md:text-xl mt-4 sm:mt-6 text-gray-300 leading-relaxed">
+                        SharpVision is a small indie game studio with a big passion for making fun and memorable experiences on Roblox.
+                    </p>
+                    <p class="text-base sm:text-lg md:text-xl mt-3 sm:mt-4 text-gray-300 leading-relaxed">
+                        Focused on quality, community, and creativity — that's the SharpVision way.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 mb-8 sm:mb-12 px-2">
+                        <a href="#contact" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center">
+                            Get Started
+                        </a>
+                        <a href="#games" class="bg-transparent border-2 border-white hover:border-primary hover:text-primary text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300">
+                            Learn More
+                        </a>
+                    </div>
+                    
+                
+                    <!-- Stats Counters (Below Buttons) -->
+                    <div class="grid grid-cols-1 gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 px-2 sm:px-6">
+                        <!-- Single column for mobile, 3 columns for sm+ -->
+                        <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                            <!-- Visits Counter -->
+                            <div class="flex flex-col items-center py-3 sm:py-0">
+                                <div class="mb-1.5 sm:mb-2.5">
+                                <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-9 sm:h-11 md:h-12 w-auto">
+                            </div>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2.5" id="visitsCounter">0</span>
+                                <span class="text-sm sm:text-base font-bold uppercase tracking-wide text-white text-center leading-snug px-1">Enough Visits to Fill 70 Stadiums!</span>
+                            </div>
+                            
+                            <!-- Community Counter -->
+                            <div class="flex flex-col items-center py-3 sm:py-0">
+                                <div class="mb-1.5 sm:mb-2.5">
+                                    <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-9 sm:h-11 md:h-12 w-auto">
+                                </div>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2.5" id="communityCounter">0</span>
+                                <span class="text-sm sm:text-base font-bold uppercase tracking-wide text-white text-center leading-snug px-1">Big Enough to Start a Country</span>
+                            </div>
+                            
+                            <!-- Player Count Counter -->
+                            <div class="flex flex-col items-center py-3 sm:py-0">
+                                <div class="mb-1.5 sm:mb-2.5">
+                                    <img src="https://i.postimg.cc/J40LLmMc/CCUIcon.webp" alt="Players" class="h-9 sm:h-11 md:h-12 w-auto">
+                                </div>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2.5" id="playerCounter">0</span>
+                                <span class="text-sm sm:text-base font-bold uppercase tracking-wide text-white text-center leading-snug px-1">Live Humans in Our Worlds</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="py-16 sm:py-20 bg-gray-800 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full opacity-5 transform translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full opacity-5 transform -translate-x-1/2 translate-y-1/2"></div>
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Servers</h2>
+                <p class="text-lg text-gray-300 mb-8">
+                    Connect with our developers and fellow players. Get early access to
+                    updates, participate in events, and share your feedback.
+                </p>
+                <a href="https://discord.gg/sharpvision" target="_blank" rel="noopener noreferrer" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 inline-flex items-center">
+                
+                    Discord Server
+                </a>
+                <a href="https://www.roblox.com/communities/13317009/SharpVision#!/about" target="_blank" rel="noopener noreferrer" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 inline-flex items-center">
+        
+                    Roblox Group
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="games" class="py-20 relative overflow-hidden">
+        <!-- 3D Gradient Background -->
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900/95 to-gray-900"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.2),rgba(0,0,0,0))]"></div>
+            <div class="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+            <!-- Animated gradient elements -->
+            <div class="absolute -top-1/2 left-1/4 w-full max-w-2xl h-[500px] bg-gradient-to-r from-indigo-500/20 to-pink-500/20 rounded-full mix-blend-soft-light blur-3xl animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-1/4 right-1/4 w-full max-w-2xl h-[500px] bg-gradient-to-r from-purple-500/20 to-indigo-500/20 rounded-full mix-blend-soft-light blur-3xl animate-blob animation-delay-4000"></div>
+            <div class="absolute top-1/2 left-1/2 w-full max-w-3xl h-[600px] bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-full mix-blend-soft-light blur-3xl animate-blob"></div>
+        </div>
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-16 fade-in">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Games</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+              Explore our portfolio of immersive Roblox experiences designed for
+              players of all ages. Each game is crafted with attention to detail
+              and player enjoyment.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="game-card bg-gray-800 rounded-lg overflow-hidden fade-in">
+              <div class="h-48 bg-gray-700 relative">
+                <div
+                  class="absolute inset-0"
+                  style="background-image: url('https://i.postimg.cc/ZKNydggZ/image.png'); background-position: 30% center; background-size: cover;"
+                ></div>
+                <div
+                  class="absolute top-3 left-3 bg-primary text-white text-xs font-bold px-2 py-1 rounded"
+                >
+                  POPULAR
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-2">Fort Martin (USAR)</h3>
+                <p class="text-gray-400 mb-4">
+                    🌟  Welcome to Fort Martin – the heart of Basic Combat Training for the United States Army. This base is your gateway to the many facets of Army life. 
+                </p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                  <div class="flex items-center text-sm text-gray-400">
+                    <i class="ri-user-line mr-1"></i>
+                    <span>23.6M+ Players</span>
+                  </div>
+                  <a href="https://www.roblox.com/games/653205701/Fort-Martin" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap">
+                    Play Now
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="game-card bg-gray-800 rounded-lg overflow-hidden fade-in">
+              <div class="h-48 bg-gray-700 relative">
+                <div
+                  class="absolute inset-0"
+                  style="background-image: url('https://i.postimg.cc/kGBKzgft/image.png'); background-size: cover; background-position: center;"
+                ></div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-2">🏛️ White House Roleplay (USSS)</h3>
+                <p class="text-gray-400 mb-4">
+                    👮‍♂️ Live Your Role: Choose to be a Citizen, Criminal, Police Officer, or even the President in our dynamic city. Enforce the law, run criminal enterprises, or lead the nation!
+                </p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                  <div class="flex items-center text-sm text-gray-400">
+                    <i class="ri-user-line mr-1"></i>
+                    <span>16.7M+ Players</span>
+                  </div>
+                  <a href="https://www.roblox.com/games/4838322068/White-House-Roleplay" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap">
+                    Play Now
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="game-card bg-gray-800 rounded-lg overflow-hidden fade-in">
+              <div class="h-48 bg-gray-700 relative">
+                <div
+                  class="absolute inset-0"
+                  style="background-image: url('https://i.postimg.cc/mgyrDfp4/image.webp'); background-size: cover; background-position: center;"
+                ></div>
+                <div
+                  class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded"
+                >
+                  NEW
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-2">🎙️ Let's Mic!</h3>
+                <p class="text-gray-400 mb-4">
+                    Let's Mic is a chill hangout game on Roblox where you can grab the mic, perform, and just vibe with your friends.
+                </p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                  <div class="flex items-center text-sm text-gray-400">
+                    <i class="ri-user-line mr-1"></i>
+                    <span>500+ Players</span>
+                  </div>
+                  <a href="https://www.roblox.com/games/79878571304797/BETA-RELEASE-Lets-Mic" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     class="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap">
+                    Play Now
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Upcoming Games Section -->
+        <div class="mt-20 fade-in">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">Upcoming Games</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto text-center mb-12">
+              Get excited for these new experiences coming soon to SharpVision. Be the first to play!
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+              <div class="game-card bg-gray-800 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all">
+                <div class="h-48 bg-gray-700 relative">
+                  <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-gray-800 flex items-center justify-center">
+                    <i class="ri-gamepad-line text-6xl text-primary/50"></i>
+                  </div>
+                  <div class="absolute top-3 left-3 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+                    COMING SOON
+                  </div>
+                </div>
+                <div class="p-4 sm:p-5">
+                  <h3 class="text-lg font-bold mb-1.5">Mystery Adventure</h3>
+                  <p class="text-sm text-gray-400 mb-3">
+                    Explore hidden temples, solve ancient puzzles, and uncover treasures in this exciting adventure game.
+                  </p>
+                  <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-700">
+                    <div class="flex items-center text-sm text-gray-400">
+                      <i class="ri-calendar-line mr-1"></i>
+                      <span>Q3 2023</span>
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>
+              
+              <div class="game-card bg-gray-800 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all">
+                <div class="h-48 bg-gray-700 relative">
+                  <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-gray-800 flex items-center justify-center">
+                    <i class="ri-sword-line text-6xl text-purple-500/50"></i>
+                  </div>
+                  <div class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">
+                    IN DEVELOPMENT
+                  </div>
+                </div>
+                <div class="p-4 sm:p-5">
+                  <h3 class="text-lg font-bold mb-1.5">Battle Arena</h3>
+                  <p class="text-sm text-gray-400 mb-3">
+                    Compete against players worldwide in this fast-paced multiplayer battle arena with unique character abilities.
+                  </p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                    <div class="flex items-center text-sm text-gray-400">
+                      <i class="ri-calendar-line mr-1"></i>
+                      <span>Q4 2023</span>
+                    </div>
+                   
+                  </div>
+                </div>
+              </div>
+              
+              <div class="game-card bg-gray-800 rounded-lg overflow-hidden border border-primary/20 hover:border-primary/50 transition-all">
+                <div class="h-48 bg-gray-700 relative">
+                  <div class="absolute inset-0 bg-gradient-to-br from-green-500/20 to-gray-800 flex items-center justify-center">
+                    <i class="ri-building-line text-6xl text-green-500/50"></i>
+                  </div>
+                  <div class="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                    EARLY CONCEPT
+                  </div>
+                </div>
+                <div class="p-3 sm:p-4">
+                  <h3 class="text-md font-bold mb-1">Space Explorers</h3>
+                  <p class="text-xs text-gray-400 mb-2">
+                    Design, build, and manage your own virtual city with advanced simulation mechanics and creative freedom.
+                  </p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                    <div class="flex items-center text-xs text-gray-400">
+                      <i class="ri-calendar-line mr-1"></i>
+                      <span>2024</span>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-gray-900">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
+                <div class="fade-in">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Get In Touch</h2>
+                    <p class="text-gray-400 mb-8">
+                        Have questions about our games or interested in collaborating?
+                        Reach out to us using the contact form or through our social media
+                        channels.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-lg mr-4">
+                                <i class="ri-mail-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-1">Email</h3>
+                                <p class="text-gray-400">contact@sharpvision.dev</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-lg mr-4">
+                                <i class="ri-discord-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-1">Discord</h3>
+                                <p class="text-gray-400">discord.gg/sharpvision</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <div class="bg-gray-800 rounded-lg p-6 sm:p-8">
+                        <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
+                        <form id="contactForm" action="#" method="POST" novalidate>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                                    <input type="text" id="name" name="name" class="w-full bg-gray-700 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Your name" required minlength="2" aria-required="true">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                                    <input type="email" id="email" name="email" class="w-full bg-gray-700 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:outline-none" placeholder="Your email" required aria-required="true">
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                                <textarea id="message" name="message" rows="5" class="w-full bg-gray-700 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:outline-none resize-none" placeholder="Your message" required minlength="10" aria-required="true"></textarea>
+                            </div>
+                            <div class="form-errors text-red-400 text-sm mb-4 hidden"></div>
+                            <button type="submit" class="w-full bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300" aria-live="polite">
+                                <span class="submit-text">Send Message</span>
+                                <span class="loading hidden">Sending...</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-b from-gray-800 to-gray-900 pt-16 pb-10 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-1/4 -right-20 w-96 h-96 bg-primary rounded-full mix-blend-soft-light blur-3xl"></div>
+            <div class="absolute bottom-1/4 -left-20 w-80 h-80 bg-indigo-500 rounded-full mix-blend-soft-light blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <!-- Main Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
+                <!-- Brand Info -->
+                <div class="lg:col-span-4">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <img src="https://i.postimg.cc/4y5C7WZf/image-removebg-preview-1.png" alt="SharpVision Logo" class="h-10 w-auto">
+                        <span class="text-2xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">SharpVision</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Creating immersive gaming experiences that bring players together from around the world.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300 transform hover:-translate-y-1 text-xl" aria-label="Twitter">
+                            <i class="ri-twitter-x-line"></i>
+                        </a>
+                        <a href="https://discord.gg/sharpvision" class="text-gray-500 hover:text-indigo-400 transition-all duration-300 transform hover:-translate-y-1 text-xl" aria-label="Discord">
+                            <i class="ri-discord-line"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-red-500 transition-all duration-300 transform hover:-translate-y-1 text-xl" aria-label="YouTube">
+                            <i class="ri-youtube-line"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="lg:col-span-2 lg:col-start-8">
+                    <h3 class="text-white font-semibold mb-5 text-lg relative inline-block">
+                        <span class="relative z-10">Games</span>
+                        <span class="absolute bottom-0 left-0 w-1/2 h-0.5 bg-primary"></span>
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#games" class="text-gray-400 hover:text-primary text-sm transition-all duration-300 hover:pl-2 block">All Games</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary text-sm transition-all duration-300 hover:pl-2 block">Upcoming</a></li>
+                       
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="lg:col-span-3 lg:col-start-10">
+                    <h3 class="text-white font-semibold mb-5 text-lg relative inline-block">
+                        <span class="relative z-10">Contact</span>
+                        <span class="absolute bottom-0 left-0 w-1/2 h-0.5 bg-primary"></span>
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="ri-mail-line text-gray-500 mt-0.5 mr-3"></i>
+                            <a href="mailto:contact@sharpvision.com" class="text-gray-400 hover:text-primary text-sm transition-colors">contact@sharpvision.com</a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                        &copy; 2025 SharpVision. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-6">
+                        
+                        <a href="https://rast0fx.github.io/Portfolio/" class="text-gray-500 hover:text-primary text-sm transition-colors flex items-center">
+                            Made by Mhamad Koussa (rast0fx)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+ document.addEventListener("DOMContentLoaded", function () {
+    // Loader
+    const loader = document.querySelector(".loader");
+    setTimeout(() => {
+        loader.classList.add("hidden");
+        loader.style.display = "none";
+        
+        // Start the counter animations after loader is hidden
+        animateCounter('visitsCounter', 5782340, 1000);
+        animateCounter('communityCounter', 4536870, 1000);
+        animateCounter('playerCounter', 40300000, 1000);
+    }, 1500);
+
+    // Initialize mobile menu state
+    const mobileMenu = document.getElementById('mobileMenu');
+    const hamburger = document.getElementById('hamburger');
+    const navbar = document.getElementById('navbar');
+    
+    // Mobile menu functionality
+    window.toggleMobileMenu = function() {
+        hamburger.classList.toggle('active');
+        const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+        mobileMenu.classList.toggle('active');
+        mobileMenu.setAttribute('aria-hidden', !isExpanded);
+        hamburger.setAttribute('aria-expanded', !isExpanded);
+        document.body.style.overflow = !isExpanded ? 'hidden' : '';
+    };
+
+    // Improved scroll handling for all navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            // If mobile menu is open, close it
+            if (mobileMenu && mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const navbarHeight = navbar.offsetHeight;
+                const targetPosition = targetElement.offsetTop - navbarHeight;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Ensure body scroll is enabled
+                document.body.style.overflow = '';
+                
+                // Update URL without scrolling
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+
+    // Handle initial hash in URL
+    if (window.location.hash) {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+            setTimeout(() => {
+                const navbarHeight = navbar.offsetHeight;
+                const targetPosition = targetElement.offsetTop - navbarHeight;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                // Ensure body scroll is enabled
+                document.body.style.overflow = '';
+            }, 100);
+        }
+    }
+
+    // Navbar Scroll Effect
+    function handleScroll() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-gray-900', 'shadow-lg');
+            navbar.classList.remove('bg-transparent');
+        } else {
+            navbar.classList.remove('bg-gray-900', 'shadow-lg');
+            navbar.classList.add('bg-transparent');
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    // Fade-in Animation
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const fadeInOnScroll = () => {
+        fadeElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            if (elementTop < window.innerHeight - 150) {
+                element.classList.add('visible');
+            }
+        });
+    };
+    window.addEventListener('scroll', fadeInOnScroll);
+    fadeInOnScroll();
+    
+    // Scroll to top button
+    const scrollToTopBtn = document.createElement('button');
+    scrollToTopBtn.className = 'scroll-to-top';
+    scrollToTopBtn.innerHTML = '↑';
+    scrollToTopBtn.title = 'Scroll to top';
+    document.body.appendChild(scrollToTopBtn);
+
+    // Show/hide scroll to top button
+    function toggleScrollToTop() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+    }
+
+    // Scroll to top functionality
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        // Ensure body scroll is enabled
+        document.body.style.overflow = '';
+    });
+
+    // Initial check for scroll position
+    toggleScrollToTop();
+    
+    // Update scroll position on scroll
+    let isScrolling;
+    window.addEventListener('scroll', () => {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(() => {
+            toggleScrollToTop();
+        }, 66);
+    }, false);
+
+    // Form handling
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const errorContainer = this.querySelector('.form-errors');
+            errorContainer.classList.add('hidden');
+            errorContainer.textContent = '';
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const submitText = submitBtn.querySelector('.submit-text');
+            const loadingText = submitBtn.querySelector('.loading');
+            submitText.classList.add('hidden');
+            loadingText.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            } catch (error) {
+                errorContainer.textContent = 'Failed to send message. Please try again later.';
+                errorContainer.classList.remove('hidden');
+            } finally {
+                submitText.classList.remove('hidden');
+                loadingText.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+    }
+    
+    // Merch Modal
+    const modal = document.getElementById('merchModal');
+    
+    // Merch Modal Toggle Function
+    window.toggleMerchModal = function() {
+        const isHidden = modal.classList.contains('hidden');
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = isHidden ? 'hidden' : '';
+        modal.setAttribute('aria-hidden', !isHidden);
+    }
+    
+    // Add event listeners for all merch buttons
+    document.querySelectorAll('.merch-modal-trigger, .merch-alert').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+            toggleMerchModal();
+        });
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (!modal.classList.contains('hidden')) {
+                toggleMerchModal();
+            }
+            if (mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        // Close mobile menu when clicking outside
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            if (mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        }
+        
+        // Close modal when clicking outside
+        if (modal && !modal.classList.contains('hidden')) {
+            const modalContent = modal.querySelector('.max-w-md');
+            if (!modalContent.contains(e.target) && !e.target.closest('.merch-modal-trigger')) {
+                toggleMerchModal();
+            }
+        }
+    });
+
+    // Member Counter Animation
+    function animateCounter(targetElement, finalValue, duration = 2000) {
+        const counter = document.getElementById(targetElement);
+        if (!counter) return;
+        
+        let startValue = 0;
+        const increment = Math.ceil(finalValue / 100);
+        const stepTime = Math.abs(Math.floor(duration / 100));
+        
+        const timer = setInterval(() => {
+            startValue += increment;
+            counter.textContent = startValue.toLocaleString();
+            
+            if (startValue >= finalValue) {
+                counter.textContent = finalValue.toLocaleString();
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
+    
+   
+});
+    </script>
+</body>
+</html>
