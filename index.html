@@ -184,14 +184,66 @@
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
+        /* Enhanced Animation Classes */
         .fade-in {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+        
+        /* New Animation Classes */
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-in-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in-left.visible,
+        .fade-in-right.visible,
+        .fade-in-up.visible,
+        .fade-in-scale.visible {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+        
+        /* Hover Animations */
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #0099ff, #00ffaa);
+            z-index: 1000;
+            transition: width 0.1s ease-out;
         }
         .hamburger {
             display: none;
@@ -414,10 +466,10 @@
                 
                 <div class="hidden md:flex items-center space-x-2">
                     <ul class="flex items-center space-x-6">
-                        <li><a href="#home" class="text-white hover:text-primary transition-colors font-medium">Home</a></li>
-                        <li><a href="#games" class="text-white hover:text-primary transition-colors font-medium">Games</a></li>
-                        
-                        <li><a href="#contact" class="text-white hover:text-primary transition-colors font-medium">Contact</a></li>
+                        <li><a href="#home" class="text-white hover:text-primary transition-colors duration-300 font-medium">Home</a></li>
+                        <li><a href="#about" class="text-white hover:text-primary transition-colors duration-300 font-medium">About Us</a></li>
+                        <li><a href="#games" class="text-white hover:text-primary transition-colors duration-300 font-medium">Games</a></li>
+                        <li><a href="#contact" class="text-white hover:text-primary transition-colors duration-300 font-medium">Contact</a></li>
                     </ul>
                 </div>
                 
@@ -427,8 +479,8 @@
                     <h2 id="mobileMenuTitle" class="sr-only">Mobile Navigation Menu</h2>
                     <ul class="flex flex-col items-center space-y-8 py-8">
                         <li><a href="#home" class="text-2xl font-medium hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-2xl font-medium hover:text-primary transition-colors">About Us</a></li>
                         <li><a href="#games" class="text-2xl font-medium hover:text-primary transition-colors">Games</a></li>
-                        
                         <li><a href="#contact" class="text-2xl font-medium hover:text-primary transition-colors">Contact</a></li>
                         <li class="w-full mt-8">
                             <button class="w-full merch-modal-trigger bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center space-x-2 text-base">
@@ -520,25 +572,72 @@
         </div>
     </section>
 
-    <!-- Community Section -->
-    <section class="py-16 sm:py-20 bg-gray-800 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full opacity-5 transform translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-600 rounded-full opacity-5 transform -translate-x-1/2 translate-y-1/2"></div>
-        <div class="container mx-auto px-4 sm:px-6 relative z-10">
-            <div class="max-w-4xl mx-auto text-center fade-in">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Servers</h2>
-                <p class="text-lg text-gray-300 mb-8">
-                    Connect with our developers and fellow players. Get early access to
-                    updates, participate in events, and share your feedback.
-                </p>
-                <a href="https://discord.gg/sharpvision" target="_blank" rel="noopener noreferrer" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 inline-flex items-center">
-                
-                    Discord Server
-                </a>
-                <a href="https://www.roblox.com/communities/13317009/SharpVision#!/about" target="_blank" rel="noopener noreferrer" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 inline-flex items-center">
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-24 bg-gray-900 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute inset-0">
+            <div class="absolute top-0 left-1/4 w-72 h-72 bg-primary/5 rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full filter blur-3xl"></div>
+        </div>
         
-                    Roblox Group
-                </a>
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center mb-16 fade-in">
+               
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">About <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-indigo-400">SharpVision</span></h2>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    We're more than just a game studio. We're a passionate team dedicated to creating extraordinary experiences on Roblox.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Quality Pillar -->
+                <div class="group bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-primary/30 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-primary/20 transition-colors duration-300">
+                        <i class="ri-star-s-fill text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Quality First</h3>
+                    <p class="text-gray-400">
+                        Every game we create is a labor of love, polished to perfection with attention to detail that ensures smooth, enjoyable gameplay experiences.
+                    </p>
+                </div>
+
+                <!-- Community Pillar -->
+                <div class="group bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-indigo-500/20 transition-colors duration-300">
+                        <i class="ri-community-fill text-3xl text-indigo-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Community Driven</h3>
+                    <p class="text-gray-400">
+                        Our players inspire us. We listen, engage, and grow with our community to create games that bring people together and create lasting memories.
+                    </p>
+                </div>
+
+                <!-- Creativity Pillar -->
+                <div class="group bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-purple-500/20 transition-colors duration-300">
+                        <i class="ri-lightbulb-flash-fill text-3xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Boundless Creativity</h3>
+                    <p class="text-gray-400">
+                        We push the limits of what's possible on Roblox, constantly innovating and exploring new ideas to deliver fresh, engaging experiences.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Community CTA -->
+            <div class="mt-20 text-center fade-in">
+                <h3 class="text-2xl font-bold mb-6">Join Our Growing Community</h3>
+                <p class="text-gray-300 max-w-2xl mx-auto mb-8">
+                    Connect with fellow players, get exclusive updates, and be the first to know about our latest projects and events.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://discord.gg/sharpvision" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-full hover:shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 inline-flex items-center">
+                        <i class="ri-discord-fill mr-2"></i> Join Our Discord
+                    </a>
+                    <a href="https://www.roblox.com/communities/13317009/SharpVision#!/about" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white/5 text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300 inline-flex items-center">
+                        <i class="ri-robot-line mr-2"></i> Roblox Group
+                    </a>
+                </div>
             </div>
         </div>
     </section>
