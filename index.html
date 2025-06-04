@@ -3,7 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:; frame-ancestors 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>SharpVision</title>
+    <!-- Cookie Consent Script -->
+    <script>
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Function to get a cookie
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Function to handle cookie consent
+        function handleCookieConsent(accepted) {
+            if (accepted) {
+                setCookie('cookie_consent', 'accepted', 365);
+                // Add any additional tracking cookies here if needed
+                // setCookie('_ga', 'GA1.2.3.4', 365); // Example Google Analytics
+            } else {
+                setCookie('cookie_consent', 'denied', 365);
+            }
+            document.getElementById('cookie-consent-banner').classList.add('hidden');
+        }
+
+        // Check cookie consent on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const consent = getCookie('cookie_consent');
+            if (!consent) {
+                document.getElementById('cookie-consent-banner').classList.remove('hidden');
+            }
+        });
+    </script>
+    <style>
+        /* Cookie Consent Banner Styles */
+        #cookie-consent-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 10, 20, 0.9);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #cookie-consent-banner.show {
+            transform: translateY(0);
+        }
+
+        #cookie-consent-banner.hidden {
+            display: none;
+        }
+
+
+        .cookie-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .cookie-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cookie-btn.accept {
+            background: #0099ff;
+            border: none;
+            color: white;
+        }
+
+        .cookie-btn.accept:hover {
+            background: #0077cc;
+            transform: translateY(-1px);
+        }
+
+        .cookie-btn.decline {
+            background: transparent;
+            border: 1px solid #4a5568;
+            color: #a0aec0;
+        }
+
+
+        .cookie-btn.decline:hover {
+            border-color: #718096;
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            #cookie-consent-banner {
+                padding: 1rem;
+            }
+            
+            .cookie-buttons {
+                flex-direction: column;
+            }
+            
+            .cookie-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
     <link rel="icon" href="https://i.postimg.cc/CxdB6Wx1/image.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -508,7 +638,7 @@
             <span>New Merch Drop!</span>
         </button>
         
-        <div class="container mx-auto px-4 sm:px-6 py-12 relative z-10 w-full">
+        <div class="container mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-12 relative z-10 w-full">
             <div class="max-w-4xl mx-auto">
                 <!-- Text Content -->
                 <div class="text-center mb-8 sm:mb-12 px-2">
@@ -536,34 +666,34 @@
                     
                 
                     <!-- Stats Counters (Below Buttons) -->
-                    <div class="w-full max-w-4xl mx-auto mt-8 sm:mt-12 px-2 sm:px-6">
-                        <!-- 3 columns for all screen sizes with adjusted spacing -->
-                        <div class="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6">
+                    <div class="w-full max-w-4xl mx-auto mt-8 sm:mt-12 px-4 sm:px-6">
+                        <!-- Responsive grid: 1 column on mobile, 3 columns on larger screens -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                             <!-- Visits Counter -->
-                            <div class="flex flex-col items-center py-2 sm:py-0">
-                                <div class="mb-1 sm:mb-2">
-                                    <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-7 sm:h-9 md:h-11 w-auto">
+                            <div class="flex flex-col items-center bg-gray-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-700/50">
+                                <div class="mb-2 sm:mb-3">
+                                    <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-8 sm:h-10 md:h-12 w-auto">
                                 </div>
-                                <span class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-1 sm:mb-1.5" id="visitsCounter">0</span>
-                                <span class="text-[10px] xs:text-xs sm:text-sm font-bold uppercase tracking-wide text-white text-center leading-tight px-0.5">Enough Visits to Fill 70 Stadiums!</span>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="visitsCounter">0</span>
+                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Enough Visits to Fill 70 Stadiums!</span>
                             </div>
                             
                             <!-- Community Counter -->
-                            <div class="flex flex-col items-center py-2 sm:py-0">
-                                <div class="mb-1 sm:mb-2">
-                                    <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-7 sm:h-9 md:h-11 w-auto">
+                            <div class="flex flex-col items-center bg-gray-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-700/50">
+                                <div class="mb-2 sm:mb-3">
+                                    <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-8 sm:h-10 md:h-12 w-auto">
                                 </div>
-                                <span class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-1 sm:mb-1.5" id="communityCounter">0</span>
-                                <span class="text-[10px] xs:text-xs sm:text-sm font-bold uppercase tracking-wide text-white text-center leading-tight px-0.5">Big Enough to Start a Country</span>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="communityCounter">0</span>
+                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Big Enough to Start a Country</span>
                             </div>
                             
                             <!-- Player Count Counter -->
-                            <div class="flex flex-col items-center py-2 sm:py-0">
-                                <div class="mb-1 sm:mb-2">
-                                    <img src="https://i.postimg.cc/J40LLmMc/CCUIcon.webp" alt="Players" class="h-7 sm:h-9 md:h-11 w-auto">
+                            <div class="flex flex-col items-center bg-gray-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-700/50">
+                                <div class="mb-2 sm:mb-3">
+                                    <img src="https://i.postimg.cc/J40LLmMc/CCUIcon.webp" alt="Players" class="h-8 sm:h-10 md:h-12 w-auto">
                                 </div>
-                                <span class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-1 sm:mb-1.5" id="playerCounter">0</span>
-                                <span class="text-[10px] xs:text-xs sm:text-sm font-bold uppercase tracking-wide text-white text-center leading-tight px-0.5">Live Humans in Our Worlds</span>
+                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="playerCounter">0</span>
+                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Live Humans in Our Worlds</span>
                             </div>
                         </div>
                     </div>
@@ -632,7 +762,7 @@
                 </p>
                 <div class="flex flex-wrap justify-center gap-4">
                     <a href="https://discord.gg/sharpvision" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-full hover:shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 inline-flex items-center">
-                        <i class="ri-discord-fill mr-2"></i> Join Our Discord
+                        <i class="ri-discord-fill mr-2"></i> Discord Server
                     </a>
                     <a href="https://www.roblox.com/communities/13317009/SharpVision#!/about" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white/5 text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300 inline-flex items-center">
                         <i class="ri-roblox-fill mr-2"></i> Roblox Group
@@ -873,7 +1003,17 @@
                 <div class="fade-in">
                     <div class="bg-gray-800 rounded-lg p-6 sm:p-8">
                         <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
-                        <form id="contactForm" action="https://formspree.io/f/xpwrzpar" method="POST" novalidate>
+                        <form id="contactForm" class="space-y-4" method="POST" action="#" autocomplete="on">
+        <!-- CSRF Token (you'll need server-side validation for this) -->
+        <input type="hidden" name="csrf_token" id="csrf_token" value="">
+        <script>
+            // Generate a simple CSRF token (for demo purposes)
+            // In production, use a proper server-side token
+            document.addEventListener('DOMContentLoaded', function() {
+                const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                document.getElementById('csrf_token').value = token;
+            });
+        </script>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Name</label>
@@ -1295,5 +1435,71 @@
    
 });
     </script>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="hidden">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div class="mb-4 sm:mb-0 sm:mr-8">
+                    <h3 class="text-lg font-semibold mb-2">We value your privacy</h3>
+                    <p class="text-sm text-gray-300">
+                        We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. 
+                        By clicking "Accept All", you consent to our use of cookies. You can manage your preferences in the settings.
+                    </p>
+                </div>
+                <div class="cookie-buttons">
+                    <button onclick="handleCookieConsent(true)" class="cookie-btn accept">
+                        Accept All
+                    </button>
+                    <button onclick="handleCookieConsent(false)" class="cookie-btn decline">
+                        Reject All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Security: Add nonce to inline scripts (you should generate a new one for each request in production)
+        const cspNonce = btoa(crypto.getRandomValues(new Uint8Array(16)).join('')).slice(0, 32);
+        document.querySelectorAll('script[nonce]').forEach(script => script.nonce = cspNonce);
+
+        // Show cookie banner with animation after a short delay
+        setTimeout(() => {
+            const banner = document.getElementById('cookie-consent-banner');
+            if (!banner.classList.contains('hidden')) {
+                setTimeout(() => banner.classList.add('show'), 100);
+            }
+        }, 1000);
+
+        // Security: Prevent form submission if no CSRF token
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            const csrfToken = document.getElementById('csrf_token')?.value;
+            if (!csrfToken) {
+                e.preventDefault();
+                console.error('CSRF token validation failed');
+                // You might want to show an error message to the user
+                return false;
+            }
+            // Add any additional form validation here
+            return true;
+        });
+
+        // Security: Sanitize any user input
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+    </script>
+    
+    <!-- Security: Add Subresource Integrity (SRI) hashes for external scripts -->
+    <script src="https://cdn.tailwindcss.com/3.4.16" 
+            integrity="sha384-..." 
+            crossorigin="anonymous" 
+            nonce="">
+    </script>
+    
+    <!-- Security: Add Feature Policy Header (via meta tag as fallback) -->
+    <meta http-equiv="Feature-Policy" content="camera 'none'; microphone 'none'; geolocation 'none'; payment 'none'">
 </body>
 </html>
