@@ -12,6 +12,37 @@
     <title>SharpVision</title>
     <!-- Cookie Consent Script -->
     <script>
+        // Hero background image shuffling
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroBg = document.querySelector('.hero-bg');
+            let currentImage = 1;
+            
+            function changeBackground() {
+                currentImage = currentImage === 1 ? 2 : 1;
+                const currentClass = `image${currentImage === 1 ? 2 : 1}`;
+                const nextClass = `image${currentImage}`;
+                
+                // Fade out current image
+                document.querySelector(`.hero-bg.${currentClass}`).style.opacity = '0';
+                // Fade in next image
+                document.querySelector(`.hero-bg.${nextClass}`).style.opacity = '1';
+            }
+            
+            // Initialize both background images
+            const heroBg1 = document.createElement('div');
+            heroBg1.className = 'hero-bg image1';
+            const heroBg2 = document.createElement('div');
+            heroBg2.className = 'hero-bg image2';
+            
+            // Replace the single hero-bg with our two layers
+            heroBg.parentNode.insertBefore(heroBg1, heroBg);
+            heroBg.parentNode.insertBefore(heroBg2, heroBg);
+            heroBg.remove();
+            
+            // Change background every 5 seconds
+            setInterval(changeBackground, 5000);
+        });
+
         // Function to set a cookie
         function setCookie(name, value, days) {
             let expires = "";
@@ -56,6 +87,30 @@
         });
     </script>
     <style>
+        /* Hero Background */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 1.5s ease-in-out;
+            opacity: 1;
+        }
+
+        /* Initial background image set via JavaScript */
+        .hero-bg.image1 {
+            background-image: url('https://i.postimg.cc/sD9YNxdM/zanance-T1-1.webp');
+        }
+
+        .hero-bg.image2 {
+            background-image: url('https://i.postimg.cc/yN6vP9D6/Thumb2.webp');
+            opacity: 0;
+        }
+
         /* Cookie Consent Banner Styles */
         #cookie-consent-banner {
             position: fixed;
@@ -283,10 +338,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('https://i.postimg.cc/WbgHpTs4/noFilter.webp');
+            background-image: url('https://i.postimg.cc/yN6vP9D6/Thumb2.webp');
             background-size: cover;
             background-position: center;
-            filter: blur(3.5px);
+            filter: blur(2px);
             z-index: 0;
         }
         .hero::before {
@@ -560,7 +615,7 @@
         <div class="flex items-center justify-center min-h-full p-4">
             <div class="bg-gray-800 rounded-xl p-6 sm:p-8 max-w-md w-full mx-auto my-8 relative">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-center flex-1">🔥 New Collection</h3>
+                    <h3 class="text-2xl font-bold text-center flex-1">🔥 Coming Soon...</h3>
                     <button onclick="toggleMerchModal()" class="text-gray-400 hover:text-primary ml-4" aria-label="Close">
                         <i class="ri-close-line text-2xl"></i>
                     </button>
@@ -652,9 +707,7 @@
                     <p class="text-base sm:text-lg md:text-xl mt-4 sm:mt-6 text-gray-300 leading-relaxed">
                         SharpVision is a small indie game studio with a big passion for making fun and memorable experiences on Roblox.
                     </p>
-                    <p class="text-base sm:text-lg md:text-xl mt-3 sm:mt-4 text-gray-300 leading-relaxed">
-                        Focused on quality, community, and creativity — that's the SharpVision way.
-                    </p>
+                    
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-10 mb-8 sm:mb-12 px-2">
                         <a href="#games" class="bg-primary hover:bg-blue-600 text-white font-medium py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center">
                             Get Started
@@ -1501,5 +1554,7 @@
     
     <!-- Security: Add Feature Policy Header (via meta tag as fallback) -->
     <meta http-equiv="Feature-Policy" content="camera 'none'; microphone 'none'; geolocation 'none'; payment 'none'">
+
+
 </body>
 </html>
