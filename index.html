@@ -719,58 +719,41 @@
                     </div>
                     
                 
-                    <!-- Compact Horizontal Stats -->
-                    <div class="w-full max-w-4xl mx-auto mt-6 sm:mt-10 px-2">
-                        <div class="relative">
-                            <!-- Decorative background -->
-                            <div class="absolute -inset-1 -z-10 opacity-70">
-                                <div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-indigo-500/5 to-purple-500/5 rounded-xl blur-sm"></div>
-                            </div>
-                            
-                            <div class="flex flex-row flex-nowrap sm:flex-wrap sm:justify-center overflow-x-auto pb-3 -mx-2 px-2 hide-scrollbar">
-                                <!-- Visits Counter -->
-                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-primary/30">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-primary/90 to-indigo-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
-                                            <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-4 w-4 sm:h-5 sm:w-5">
-                                        </div>
-                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="visitsCounter">0</div>
-                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Visits</div>
+                    <!-- Compact Stats Row -->
+                    <div class="w-full max-w-sm mx-auto mt-8 sm:mt-10">
+                        <div class="grid grid-cols-3 gap-3 px-2">
+                            <!-- Visits Counter -->
+                            <div class="group bg-gray-800/80 rounded-lg p-2 border border-gray-700/50 transition-colors duration-200 hover:border-primary/30">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-primary/90 to-indigo-500/90 rounded-md mb-1">
+                                        <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-4 w-4">
                                     </div>
-                                </div>
-                                
-                                <!-- Community Counter -->
-                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-indigo-500/30">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-indigo-500/90 to-purple-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
-                                            <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-4 w-4 sm:h-5 sm:w-5">
-                                        </div>
-                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="communityCounter">0</div>
-                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Community</div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Player Count -->
-                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-purple-500/30">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-purple-500/90 to-pink-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
-                                            <img src="https://i.postimg.cc/4dL5g4Z9/Players-Icon.webp" alt="Players" class="h-4 w-4 sm:h-5 sm:w-5">
-                                        </div>
-                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="playerCounter">0</div>
-                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Players</div>
-                                    </div>
+                                    <div class="text-base font-bold text-white" id="visitsCounter">0</div>
+                                    <div class="text-xs text-gray-300/90">Visits</div>
                                 </div>
                             </div>
                             
-                            <style>
-                                .hide-scrollbar::-webkit-scrollbar {
-                                    display: none;
-                                }
-                                .hide-scrollbar {
-                                    -ms-overflow-style: none;
-                                    scrollbar-width: none;
-                                }
-                            </style>
+                            <!-- Community Counter -->
+                            <div class="group bg-gray-800/80 rounded-lg p-2 border border-gray-700/50 transition-colors duration-200 hover:border-indigo-500/30">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-indigo-500/90 to-purple-500/90 rounded-md mb-1">
+                                        <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-4 w-4">
+                                    </div>
+                                    <div class="text-base font-bold text-white" id="communityCounter">0</div>
+                                    <div class="text-xs text-gray-300/90">Community</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Player Count -->
+                            <div class="group bg-gray-800/80 rounded-lg p-2 border border-gray-700/50 transition-colors duration-200 hover:border-purple-500/30">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-purple-500/90 to-pink-500/90 rounded-md mb-1">
+                                        <img src="https://i.postimg.cc/4dL5g4Z9/Players-Icon.webp" alt="Players" class="h-4 w-4">
+                                    </div>
+                                    <div class="text-base font-bold text-white" id="playerCounter">0</div>
+                                    <div class="text-xs text-gray-300/90">Players</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
