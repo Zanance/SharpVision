@@ -703,7 +703,7 @@
                             <div class="leading-tight">Experiences on</div>
                             <div class="text-primary leading-tight">Roblox</div>
                         </div>
-                        <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                        <p class="text-lg text-gray-300 max-w-3xl mx-auto mt-6 sm:mt-8">
                             SharpVision is a small indie game studio with a big passion for making fun and memorable experiences on Roblox.
                         </p> 
                     </h1>
@@ -719,36 +719,58 @@
                     </div>
                     
                 
-                    <!-- Stats Counters (Below Buttons) -->
-                    <div class="w-full max-w-4xl mx-auto mt-8 sm:mt-12 px-4 sm:px-6">
-                        <!-- Responsive grid: 1 column on mobile, 3 columns on larger screens -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                            <!-- Visits Counter -->
-                            <div class="flex flex-col items-center">
-                                <div class="mb-2 sm:mb-3">
-                                    <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-8 sm:h-10 md:h-12 w-auto">
-                                </div>
-                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="visitsCounter">0</span>
-                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Enough to Fill 70 Stadiums!</span>
+                    <!-- Compact Horizontal Stats -->
+                    <div class="w-full max-w-4xl mx-auto mt-6 sm:mt-10 px-2">
+                        <div class="relative">
+                            <!-- Decorative background -->
+                            <div class="absolute -inset-1 -z-10 opacity-70">
+                                <div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-indigo-500/5 to-purple-500/5 rounded-xl blur-sm"></div>
                             </div>
                             
-                            <!-- Community Counter -->
-                            <div class="flex flex-col items-center">
-                                <div class="mb-2 sm:mb-3">
-                                    <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-8 sm:h-10 md:h-12 w-auto">
+                            <div class="flex flex-row flex-nowrap sm:flex-wrap sm:justify-center overflow-x-auto pb-3 -mx-2 px-2 hide-scrollbar">
+                                <!-- Visits Counter -->
+                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-primary/30">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-primary/90 to-indigo-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
+                                            <img src="https://i.postimg.cc/C100Tqxz/image.png" alt="Visits" class="h-4 w-4 sm:h-5 sm:w-5">
+                                        </div>
+                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="visitsCounter">0</div>
+                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Visits</div>
+                                    </div>
                                 </div>
-                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="communityCounter">0</span>
-                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Big Enough to Start a Country</span>
+                                
+                                <!-- Community Counter -->
+                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-indigo-500/30">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-indigo-500/90 to-purple-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
+                                            <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-4 w-4 sm:h-5 sm:w-5">
+                                        </div>
+                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="communityCounter">0</div>
+                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Community</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Player Count -->
+                                <div class="group flex-shrink-0 w-32 sm:w-36 bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-3 mx-1 backdrop-blur-sm border border-gray-700/50 transition-all duration-200 hover:border-purple-500/30">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-gradient-to-br from-purple-500/90 to-pink-500/90 rounded-lg mb-1.5 transform group-hover:scale-110 transition-transform">
+                                            <img src="https://i.postimg.cc/4dL5g4Z9/Players-Icon.webp" alt="Players" class="h-4 w-4 sm:h-5 sm:w-5">
+                                        </div>
+                                        <div class="text-lg sm:text-xl font-bold text-white mb-0.5" id="playerCounter">0</div>
+                                        <div class="text-[10px] sm:text-xs text-gray-300/90 font-medium">Players</div>
+                                    </div>
+                                </div>
                             </div>
                             
-                            <!-- Player Count Counter -->
-                            <div class="flex flex-col items-center">
-                                <div class="mb-2 sm:mb-3">
-                                    <img src="https://i.postimg.cc/J40LLmMc/CCUIcon.webp" alt="Players" class="h-8 sm:h-10 md:h-12 w-auto">
-                                </div>
-                                <span class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-1.5 sm:mb-2" id="playerCounter">0</span>
-                                <span class="text-xs sm:text-sm font-medium uppercase tracking-wide text-gray-300 text-center leading-tight px-1">Live Humans in Our Worlds</span>
-                            </div>
+                            <style>
+                                .hide-scrollbar::-webkit-scrollbar {
+                                    display: none;
+                                }
+                                .hide-scrollbar {
+                                    -ms-overflow-style: none;
+                                    scrollbar-width: none;
+                                }
+                            </style>
                         </div>
                     </div>
                 </div>
@@ -1161,9 +1183,25 @@
         setInterval(fetchRobloxStats, 3600000);
         
         // Initial counters (will be updated by API)
-        animateCounter('visitsCounter', 40000000, 1000);
-        animateCounter('communityCounter', 2000000, 1000);
-        animateCounter('playerCounter', 150, 1000);
+        // Format numbers with M+ for millions
+        const formatNumber = (num) => {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(0) + 'M+';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(0) + 'K+';
+            }
+            return num.toString();
+        };
+
+        // Update counter display with formatted numbers
+        document.getElementById('visitsCounter').textContent = '40M+';
+        document.getElementById('communityCounter').textContent = '2M+';
+        document.getElementById('playerCounter').textContent = '150+';
+
+        // Original animation calls (kept for reference but won't be used with formatted numbers)
+        // animateCounter('visitsCounter', 40000000, 1000);
+        // animateCounter('communityCounter', 2000000, 1000);
+        // animateCounter('playerCounter', 150, 1000);
     }, 1500);
 
     function toggleMobileMenu() {
@@ -1451,17 +1489,21 @@
             // Update the counters
             if (totalVisits > 0) {
                 const visitsElement = document.getElementById('visitsCounter');
-                const currentVisits = parseInt(visitsElement.textContent.replace(/,/g, '')) || 0;
-                if (totalVisits > currentVisits) {
-                    animateCounter('visitsCounter', totalVisits, 1000);
+                if (visitsElement) {
+                    // Update with formatted number
+                    visitsElement.textContent = '40M+';
+                    // Original animation call (kept for reference)
+                    // animateCounter('visitsCounter', totalVisits, 1000);
                 }
             }
             
             if (totalPlayers > 0) {
                 const playersElement = document.getElementById('playerCounter');
-                const currentPlayers = parseInt(playersElement.textContent.replace(/,/g, '')) || 0;
-                if (totalPlayers > currentPlayers) {
-                    animateCounter('playerCounter', totalPlayers, 1000);
+                if (playersElement) {
+                    // Update with formatted number
+                    playersElement.textContent = '150+';
+                    // Original animation call (kept for reference)
+                    // animateCounter('playerCounter', totalPlayers, 1000);
                 }
             }
             
