@@ -1534,24 +1534,30 @@
             // Fetch data for each game
             for (const game of games) {
                 try {
-                    // Use the same CORS proxy that works for community counter
-                    const url = `https://corsproxy.io/?${encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${game.id}`)}`;
-                    console.log(`Fetching data for ${game.name} from:`, url);
+                    // Use a direct approach with the Roblox API
+                    const url = `https://games.roblox.com/v1/games?universeIds=${game.id}`;
+                    console.log(`[DEBUG] Attempting to fetch data for ${game.name} from:`, url);
                     
                     const response = await fetch(url, {
+                        method: 'GET',
                         headers: { 
                             'Accept': 'application/json',
                             'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1'
-                        }
+                        },
+                        mode: 'cors',
+                        credentials: 'omit'
                     });
                     
+                    console.log(`[DEBUG] Response status for ${game.name}:`, response.status);
+                    console.log(`[DEBUG] Response headers for ${game.name}:`, Object.fromEntries(response.headers.entries()));
+                    
                     if (!response.ok) {
-                        console.error(`Failed to fetch data for ${game.name}:`, response.status);
+                        console.error(`[ERROR] Failed to fetch data for ${game.name}:`, response.status);
                         continue;
                     }
                     
                     const data = await response.json();
-                    console.log(`Response for ${game.name}:`, data);
+                    console.log(`[DEBUG] Response data for ${game.name}:`, data);
                     
                     if (data.data && data.data[0]) {
                         const visits = data.data[0].visits || 0;
@@ -1559,26 +1565,36 @@
                         totalVisits += visits;
                         totalPlayers += playing;
                         
+                        console.log(`[DEBUG] Parsed stats for ${game.name}:`, { visits, playing });
+                        
                         // Update the game card stats with error handling
                         try {
                             if (game.visitsId) {
                                 const visitsElement = document.getElementById(game.visitsId);
                                 if (visitsElement) {
                                     visitsElement.textContent = formatNumber(visits) + " Visits";
+                                    console.log(`[DEBUG] Updated visits display for ${game.name}`);
+                                } else {
+                                    console.error(`[ERROR] Visits element not found for ${game.name}`);
                                 }
                             }
                             if (game.playingId) {
                                 const playingElement = document.getElementById(game.playingId);
                                 if (playingElement) {
                                     playingElement.textContent = playing + ' Playing';
+                                    console.log(`[DEBUG] Updated playing display for ${game.name}`);
+                                } else {
+                                    console.error(`[ERROR] Playing element not found for ${game.name}`);
                                 }
                             }
                         } catch (updateError) {
-                            console.error(`Error updating display for ${game.name}:`, updateError);
+                            console.error(`[ERROR] Error updating display for ${game.name}:`, updateError);
                         }
+                    } else {
+                        console.error(`[ERROR] No data found for ${game.name}`);
                     }
                 } catch (error) {
-                    console.error(`Error fetching data for ${game.name}:`, error);
+                    console.error(`[ERROR] Error fetching data for ${game.name}:`, error);
                     // Show loading state on error
                     if (game.visitsId) {
                         const visitsElement = document.getElementById(game.visitsId);
@@ -1591,26 +1607,34 @@
                 }
             }
             
+            console.log(`[DEBUG] Total visits: ${totalVisits}, Total players: ${totalPlayers}`);
+            
             // Update the main counters with error handling
             try {
                 const visitsElement = document.getElementById('visitsCounter');
                 if (visitsElement && totalVisits > 0) {
                     visitsElement.textContent = formatNumber(totalVisits);
+                    console.log('[DEBUG] Updated main visits counter');
+                } else {
+                    console.error('[ERROR] Visits counter element not found or no visits data');
                 }
 
                 const playerElement = document.getElementById('playerCounter');
                 if (playerElement) {
                     playerElement.textContent = formatNumber(totalPlayers);
+                    console.log('[DEBUG] Updated main player counter');
+                } else {
+                    console.error('[ERROR] Player counter element not found');
                 }
             } catch (counterError) {
-                console.error('Error updating main counters:', counterError);
+                console.error('[ERROR] Error updating main counters:', counterError);
             }
 
             // Update the community counter
             updateCommunityCounter();
             
         } catch (error) {
-            console.error('Error updating stats:', error);
+            console.error('[ERROR] Error updating stats:', error);
             // Show loading state on error
             const visitsElement = document.getElementById('visitsCounter');
             if (visitsElement) visitsElement.textContent = '...';
@@ -1621,23 +1645,23 @@
 
     // Initialize everything when the page loads
     window.addEventListener('load', () => {
-        console.log('Page loaded - Initializing counter');
+        console.log('[DEBUG] Page loaded - Initializing counter');
         const visitsElement = document.getElementById('visitsCounter');
         if (visitsElement) {
             visitsElement.textContent = '0+';
-            console.log('Counter initialized to 0+');
+            console.log('[DEBUG] Counter initialized to 0+');
             
             // Fetch stats immediately
-            console.log('Fetching initial stats...');
+            console.log('[DEBUG] Fetching initial stats...');
             fetchRobloxStats();
             
-            // Update stats every 15 minutes instead of 5 for better mobile performance
+            // Update stats every 15 minutes
             setInterval(() => {
-                console.log('Fetching updated stats...');
+                console.log('[DEBUG] Fetching updated stats...');
                 fetchRobloxStats();
             }, 15 * 60 * 1000);
         } else {
-            console.error('Visits counter element not found on page load');
+            console.error('[ERROR] Visits counter element not found on page load');
         }
     });
     
