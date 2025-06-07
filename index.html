@@ -600,6 +600,25 @@
             }
         }
     </style>
+    <style>
+        @keyframes countUp {
+            from {
+                --count: 0;
+            }
+            to {
+                --count: 40652243;
+            }
+        }
+
+        .counter-animation {
+            animation: countUp 2s linear forwards;
+            counter-reset: count var(--count);
+        }
+
+        .counter-animation::after {
+            content: counter(count) '+';
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <!-- Loader -->
@@ -739,7 +758,7 @@
                                     <div class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-indigo-500/90 to-purple-500/90 rounded-md mb-1">
                                         <img src="https://i.postimg.cc/LX2c0FxP/Members-Icon.webp" alt="Community" class="h-4 w-4">
                                     </div>
-                                    <div class="text-base font-bold text-white" id="communityCounter">0</div>
+                                    <div class="text-base font-bold text-white" id="communityCounter">2M+</div>
                                     <div class="text-xs text-gray-300/90">Community</div>
                                 </div>
                             </div>
@@ -750,7 +769,7 @@
                                     <div class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-indigo-500/90 to-purple-500/90 rounded-md mb-1">
                                         <img src="https://i.postimg.cc/CMsTvFQ5/joystick.webp" alt="Players" class="h-4 w-4">
                                     </div>
-                                    <div class="text-base font-bold text-white" id="playerCounter">0</div>
+                                    <div class="text-base font-bold text-white" id="playerCounter">150+</div>
                                     <div class="text-xs text-gray-300/90">Players</div>
                                 </div>
                             </div>
@@ -874,9 +893,15 @@
                     🌟  Welcome to Fort Martin – the heart of Basic Combat Training for the United States Army. This base is your gateway to the many facets of Army life. 
                 </p>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 min-h-[40px]">
-                  <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
-                    <i class="ri-user-line mr-1"></i>
-                    <span>23.6M+ Players</span>
+                  <div class="flex flex-col gap-1">
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-eye-line mr-1"></i>
+                      <span id="fm-visits">...</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-gamepad-line mr-1"></i>
+                      <span id="fm-playing">...</span>
+                    </div>
                   </div>
                   <a href="https://www.roblox.com/games/653205701/Fort-Martin" 
                      target="_blank" 
@@ -900,9 +925,15 @@
                     👮‍♂️ Live Your Role: Choose to be a Citizen, Criminal, Police Officer, or even the President in our dynamic city. Enforce the law, run criminal enterprises, or lead the nation!
                 </p>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 min-h-[40px]">
-                  <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
-                    <i class="ri-user-line mr-1"></i>
-                    <span>16.7M+ Players</span>
+                  <div class="flex flex-col gap-1">
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-eye-line mr-1"></i>
+                      <span id="wh-visits">...</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-gamepad-line mr-1"></i>
+                      <span id="wh-playing">...</span>
+                    </div>
                   </div>
                   <a href="https://www.roblox.com/games/4838322068/White-House-Roleplay" 
                      target="_blank" 
@@ -934,9 +965,15 @@
                 
                 </p>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 min-h-[40px]">
-                  <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
-                    <i class="ri-user-line mr-1"></i>
-                    <span>500+ Players</span>
+                  <div class="flex flex-col gap-1">
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-eye-line mr-1"></i>
+                      <span id="lm-visits">...</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-400 whitespace-nowrap">
+                      <i class="ri-gamepad-line mr-1"></i>
+                      <span id="lm-playing">...</span>
+                    </div>
                   </div>
                   <a href="https://www.roblox.com/games/79878571304797/BETA-RELEASE-Lets-Mic" 
                      target="_blank" 
@@ -1177,9 +1214,7 @@
         };
 
         // Update counter display with formatted numbers
-        document.getElementById('visitsCounter').textContent = '40M+';
-        document.getElementById('communityCounter').textContent = '2M+';
-        document.getElementById('playerCounter').textContent = '150+';
+        document.getElementById('visitsCounter').textContent = '0+';
 
         // Original animation calls (kept for reference but won't be used with formatted numbers)
         // animateCounter('visitsCounter', 40000000, 1000);
@@ -1438,14 +1473,59 @@
         }
     });
 
+    // Function to format numbers with K/M/B suffixes
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M+';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K+';
+        }
+        return num.toString() + '+';
+    }
+
+    // Function to fetch and update community member count
+    async function updateCommunityCounter() {
+        const groupIds = [
+            '3108077', // United States Army
+            '5856978', // United States Secret Service
+            '13317009' // SharpVision
+        ];
+        let totalMembers = 0;
+
+        for (const groupId of groupIds) {
+            try {
+                const url = `https://corsproxy.io/?https://groups.roblox.com/v1/groups/${groupId}`;
+                const response = await fetch(url, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) {
+                    console.error(`Failed to fetch group ${groupId}:`, response.status);
+                    continue;
+                }
+                const data = await response.json();
+                totalMembers += data.memberCount || 0;
+                console.log(`Group ${groupId} members:`, data.memberCount);
+            } catch (error) {
+                console.error(`Error fetching group ${groupId}:`, error);
+            }
+        }
+
+        const communityElement = document.getElementById('communityCounter');
+        if (communityElement) {
+            communityElement.textContent = formatNumber(totalMembers);
+        } else {
+            console.error('Community counter element not found');
+        }
+    }
+
     // Function to fetch Roblox game statistics
     async function fetchRobloxStats() {
         try {
-            // Game IDs from the provided URLs
+            // Game IDs and card element IDs
             const games = [
-                { id: '4838322068', name: 'White House Roleplay' },
-                { id: '653205701', name: 'Fort Martin' },
-                { id: '79878571304797', name: 'Lets Mic' }
+                { id: '1641678457', name: 'White House Roleplay', visitsId: 'wh-visits', playingId: 'wh-playing' },
+                { id: '273862097', name: 'Fort Martin', visitsId: 'fm-visits', playingId: 'fm-playing' },
+                { id: '6904157397', name: 'Lets Mic', visitsId: 'lm-visits', playingId: 'lm-playing' }
             ];
             
             let totalVisits = 0;
@@ -1453,47 +1533,98 @@
             
             // Fetch data for each game
             for (const game of games) {
-                const response = await fetch(`https://games.roblox.com/v1/games/${game.id}`);
-                if (!response.ok) continue;
-                
-                const data = await response.json();
-                totalVisits += data.visits || 0;
-                
-                // Get current player count
-                const playersResponse = await fetch(`https://games.roblox.com/v1/games/${game.id}/game-instances?maxRows=1`);
-                if (playersResponse.ok) {
-                    const playersData = await playersResponse.json();
-                    if (playersData.data && playersData.data.length > 0) {
-                        totalPlayers += playersData.data[0].playing || 0;
+                try {
+                    const url = `https://corsproxy.io/?${encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${game.id}`)}`;
+                    console.log(`Fetching data for ${game.name} from:`, url);
+                    
+                    const response = await fetch(url, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        console.error(`Failed to fetch data for ${game.name}:`, response.status);
+                        continue;
                     }
+                    
+                    const data = await response.json();
+                    console.log(`Response for ${game.name}:`, data);
+                    
+                    if (data.data && data.data[0]) {
+                        const visits = data.data[0].visits || 0;
+                        const playing = data.data[0].playing || 0;
+                        totalVisits += visits;
+                        totalPlayers += playing;
+                        console.log(`${game.name} visits:`, visits, 'playing:', playing);
+                        // Update the game card stats
+                        if (game.visitsId && document.getElementById(game.visitsId)) {
+                            document.getElementById(game.visitsId).textContent = formatNumber(visits) + " Visits";
+                        }
+                        if (game.playingId && document.getElementById(game.playingId)) {
+                            document.getElementById(game.playingId).textContent = playing + ' Playing';
+                        }
+                    } else {
+                        console.error(`No data found for ${game.name}`);
+                    }
+                } catch (error) {
+                    console.error(`Error fetching data for ${game.name}:`, error);
                 }
             }
             
-            // Update the counters
-            if (totalVisits > 0) {
-                const visitsElement = document.getElementById('visitsCounter');
-                if (visitsElement) {
-                    // Update with formatted number
-                    visitsElement.textContent = '40M+';
-                    // Original animation call (kept for reference)
-                    // animateCounter('visitsCounter', totalVisits, 1000);
-                }
-            }
+            console.log('Total visits calculated:', totalVisits);
+            console.log('Total players calculated:', totalPlayers);
             
-            if (totalPlayers > 0) {
-                const playersElement = document.getElementById('playerCounter');
-                if (playersElement) {
-                    // Update with formatted number
-                    playersElement.textContent = '150+';
-                    // Original animation call (kept for reference)
-                    // animateCounter('playerCounter', totalPlayers, 1000);
+            // Update the visits counter instantly
+            const visitsElement = document.getElementById('visitsCounter');
+            if (visitsElement) {
+                if (totalVisits > 0) {
+                    visitsElement.textContent = formatNumber(totalVisits);
+                } else {
+                    console.error('No valid visit data received');
                 }
+            } else {
+                console.error('Visits counter element not found');
             }
+
+            // Update the player counter instantly
+            const playerElement = document.getElementById('playerCounter');
+            if (playerElement) {
+                playerElement.textContent = formatNumber(totalPlayers);
+            } else {
+                console.error('Player counter element not found');
+            }
+
+            // Update the community counter
+            updateCommunityCounter();
             
         } catch (error) {
-            console.error('Error fetching Roblox stats:', error);
+            console.error('Error updating stats:', error);
         }
     }
+
+    // Initialize everything when the page loads
+    window.addEventListener('load', () => {
+        console.log('Page loaded - Initializing counter');
+        const visitsElement = document.getElementById('visitsCounter');
+        if (visitsElement) {
+            visitsElement.textContent = '0+';
+            console.log('Counter initialized to 0+');
+            
+            // Fetch stats immediately
+            console.log('Fetching initial stats...');
+            fetchRobloxStats();
+            
+            // Update stats every 5 minutes
+            setInterval(() => {
+                console.log('Fetching updated stats...');
+                fetchRobloxStats();
+            }, 5 * 60 * 1000);
+        } else {
+            console.error('Visits counter element not found on page load');
+        }
+    });
     
     // Member Counter Animation
     function animateCounter(targetElement, finalValue, duration = 2000) {
