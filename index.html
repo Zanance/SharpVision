@@ -652,7 +652,8 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero min-h-screen flex items-center justify-center relative">
-        <div class="hero-bg"></div>
+        <div class="hero-bg image1"></div>
+        <div class="hero-bg image2"></div>
         <button class="merch-alert merch-modal-trigger hero-sticky hidden md:flex" aria-label="View new merchandise">
             <i class="ri-fire-fill"></i>
             <span>New Merch Drop!</span>
@@ -1568,8 +1569,31 @@
         }
     }
 
+    // Background image shuffle functionality
+    function shuffleBackgrounds() {
+        const images = document.querySelectorAll('.hero-bg');
+        let currentImage = 0;
+        
+        function showNextImage() {
+            // Hide current image
+            images[currentImage].style.opacity = '0';
+            
+            // Move to next image (or loop back to first)
+            currentImage = (currentImage + 1) % images.length;
+            
+            // Show next image
+            images[currentImage].style.opacity = '1';
+        }
+        
+        // Start the shuffle effect (change image every 5 seconds)
+        setInterval(showNextImage, 5000);
+    }
+    
     // Initialize everything when the page loads
     window.addEventListener('load', () => {
+        // Start the background image shuffle
+        shuffleBackgrounds();
+        
         const visitsElement = document.getElementById('visitsCounter');
         if (visitsElement) {
             visitsElement.textContent = 'Loading...';
